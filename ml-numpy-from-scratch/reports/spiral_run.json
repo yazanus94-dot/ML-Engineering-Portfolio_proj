@@ -1,0 +1,11 @@
+{
+  "seed": 0,
+  "epochs": 300,
+  "hidden": 64,
+  "lr": 0.01,
+  "dataset": "synthetic spirals (not real data)",
+  "first_loss": 1.128228892206879,
+  "final_loss": 0.014454810813207285,
+  "train_accuracy": 0.9933333333333333,
+  "test_accuracy": 0.9733333333333334
+}

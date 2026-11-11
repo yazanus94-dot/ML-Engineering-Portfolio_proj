@@ -1,0 +1,83 @@
+{
+  "config": {
+    "sizes": [
+      256,
+      512,
+      512,
+      10
+    ],
+    "batch": 64,
+    "repeats": 2,
+    "seed": 0,
+    "loops_batch": 8
+  },
+  "environment": {
+    "python": "3.14.7",
+    "numpy": "2.5.4",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 158 Stepping 10, GenuineIntel",
+    "system": "Windows-11-10.0.26300-SP0"
+  },
+  "results": [
+    {
+      "impl": "reference",
+      "batch": 64,
+      "median_ms": 24.40004999516532,
+      "samples_per_s": 2622.945445303641,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "within_tolerance": true,
+      "argmax_agreement": 1.0,
+      "weight_bytes": 3194960,
+      "peak_alloc_bytes": 853496
+    },
+    {
+      "impl": "loops",
+      "batch": 8,
+      "median_ms": 206.00604999344796,
+      "samples_per_s": 38.83381094999123,
+      "rel_error": 4.786764115555933e-16,
+      "tolerance": 1e-09,
+      "within_tolerance": true,
+      "argmax_agreement": 1.0,
+      "weight_bytes": 3194960,
+      "peak_alloc_bytes": 12956280
+    },
+    {
+      "impl": "per_sample",
+      "batch": 64,
+      "median_ms": 5.336399975931272,
+      "samples_per_s": 11993.104019312414,
+      "rel_error": 2.5406973573779364e-07,
+      "tolerance": 0.0001,
+      "within_tolerance": true,
+      "argmax_agreement": 1.0,
+      "weight_bytes": 1597480,
+      "peak_alloc_bytes": 1680552
+    },
+    {
+      "impl": "batched32",
+      "batch": 64,
+      "median_ms": 0.7848999812267721,
+      "samples_per_s": 81539.05151070353,
+      "rel_error": 2.2726306357872312e-07,
+      "tolerance": 0.0001,
+      "within_tolerance": true,
+      "argmax_agreement": 1.0,
+      "weight_bytes": 1597480,
+      "peak_alloc_bytes": 427512
+    },
+    {
+      "impl": "int8",
+      "batch": 64,
+      "median_ms": 55.70505000650883,
+      "samples_per_s": 1148.9084022457919,
+      "rel_error": 0.012370407605439091,
+      "tolerance": 0.05,
+      "within_tolerance": true,
+      "argmax_agreement": 0.9375,
+      "weight_bytes": 406608,
+      "peak_alloc_bytes": 1607288
+    }
+  ]
+}
