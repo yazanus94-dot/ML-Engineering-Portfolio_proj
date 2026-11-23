@@ -1,0 +1,16 @@
+{
+  "batch_size": 64,
+  "caveat": "latency is machine-specific; compare implementations on the same host",
+  "environment": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "project_version": "0.1.0",
+    "python": "3.14.7",
+    "threads": 6,
+    "torch": "2.15.0+cpu"
+  },
+  "median_ms": 0.0568,
+  "p95_ms": 0.088,
+  "repeats": 30,
+  "samples_per_second": 1126760.1,
+  "warmup": 5
+}

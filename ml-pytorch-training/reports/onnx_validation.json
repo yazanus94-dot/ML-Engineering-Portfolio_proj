@@ -1,0 +1,10 @@
+{
+  "argmax_agreement": 1.0,
+  "max_abs_logit_difference": 9.5367431640625e-07,
+  "onnx_bytes": 9021,
+  "onnx_file": "reports\\model.onnx",
+  "opset": 13,
+  "passed": true,
+  "status": "validated",
+  "tolerance": 1e-05
+}

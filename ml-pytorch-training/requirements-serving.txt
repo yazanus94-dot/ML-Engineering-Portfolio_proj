@@ -1,0 +1,5 @@
+fastapi>=0.110
+uvicorn>=0.27
+onnx>=1.15
+onnxruntime>=1.17
+onnxscript>=0.2
