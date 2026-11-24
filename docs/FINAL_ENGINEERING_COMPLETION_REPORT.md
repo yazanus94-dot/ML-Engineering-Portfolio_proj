@@ -88,7 +88,7 @@ Untracked test file retained: `ml-numpy-from-scratch/tests/test_edge_cases.py`.
 `feat/ml-research-portfolio-upgrade`
 
 ## 17. Commit SHA
-No new commit has been created yet; changes are uncommitted so they can be reviewed before commit.
+`15e7f6f5af22fa3db6ab3e689a161bcd5bb379b5` (local commit; not pushed pending your authorization)
 
 ## 18. Exact items still requiring your approval
 - Committing and pushing these changes.
