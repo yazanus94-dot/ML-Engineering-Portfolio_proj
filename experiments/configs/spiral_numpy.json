@@ -1,0 +1,23 @@
+{
+  "experiment": "spiral_numpy_seed0",
+  "project": "ml-numpy-from-scratch",
+  "dataset": {
+    "name": "synthetic three-arm spiral",
+    "kind": "synthetic",
+    "source": "generated in-repo by nnscratch.data.make_spirals",
+    "license": "generated data; no external dataset",
+    "is_biomedical": false
+  },
+  "model": {
+    "name": "NumPy MLP 2-64-64-3",
+    "implementation": "nnscratch"
+  },
+  "seed": 0,
+  "hyperparameters": {
+    "epochs": 300,
+    "hidden": 64,
+    "lr": 0.01
+  },
+  "command": "python experiments/experiment_runner.py --config experiments/configs/spiral_numpy.json",
+  "output": "experiments/results/spiral_numpy_seed0.json"
+}

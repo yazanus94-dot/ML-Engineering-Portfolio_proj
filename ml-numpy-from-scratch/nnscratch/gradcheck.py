@@ -12,7 +12,11 @@ def check_module(module, x, rng, eps: float = 1e-6, max_checks: int = 40) -> dic
     """Compare analytic and numerical gradients of L = sum(R * module(x)) for the input and every parameter.
 
     Returns {name: max relative error}. Float64 and a smooth loss should give errors below ~1e-6.
+    This is a *sampled* check: at most ``max_checks`` entries are compared per
+    input or parameter tensor. It is not an exhaustive gradient validation.
     """
+    if max_checks < 1:
+        raise ValueError("max_checks must be at least 1")
     y0 = module.forward(x)
     r = rng.standard_normal(y0.shape)
 

@@ -11,7 +11,7 @@ Eight realistic machine-learning bugs (softmax overflow, log of zero, wrong axis
 | `lab/report.py` | Prints a table and generates `docs/cases.md` |
 | `docs/cases.md` | Generated write-up: symptom, cause, fix, property, buggy vs fixed output |
 | `docs/debugging-playbook.md` | General checklist for numerical and system-level ML failures |
-| `tests/` | Every bug is reproduced and every fix verified |
+| `tests/` | 11 tests: every bug is reproduced and every fix verified, including the C03 mean/std property and the C04 train-only scaling contract |
 
 ## Run
 ```bash

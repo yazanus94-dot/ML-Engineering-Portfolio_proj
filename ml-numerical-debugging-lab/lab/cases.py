@@ -63,9 +63,16 @@ def standardise_buggy(X):
 
 
 def standardise_fixed(X):
-    return (X - X.mean(axis=0, keepdims=True)) / X.std(
-        axis=0, keepdims=True
-    )  # per-feature
+    """Standardise each feature using its own mean and standard deviation.
+
+    Constant features have zero standard deviation; they are mapped to zero
+    rather than producing NaN or infinity.
+    """
+    X = np.asarray(X)
+    mu = X.mean(axis=0, keepdims=True)
+    sd = X.std(axis=0, keepdims=True)
+    sd = np.where(sd == 0.0, 1.0, sd)
+    return (X - mu) / sd
 
 
 # 4 ---------------------------------------------------------------- train/test leakage in scaling
@@ -193,9 +200,13 @@ CASES = [
         "Every feature (column) has mean 0 and std 1.",
         standardise_buggy,
         standardise_fixed,
-        lambda: (standardise_buggy(_DATA).mean(0), standardise_fixed(_DATA).mean(0)),
-        lambda b, f: (not np.allclose(b, 0, atol=1e-9))
-        and np.allclose(f, 0, atol=1e-9),
+        lambda: (
+            (standardise_buggy(_DATA).mean(0), standardise_fixed(_DATA).mean(0)),
+            standardise_fixed(_DATA).std(0),
+        ),
+        lambda means, stds: (not np.allclose(means[0], 0, atol=1e-9))
+        and np.allclose(means[1], 0, atol=1e-9)
+        and np.allclose(stds, 1, atol=1e-9),
     ),
     Case(
         "C04",

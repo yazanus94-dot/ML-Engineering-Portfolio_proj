@@ -7,7 +7,42 @@ Every layer exposes:
 """
 
 from __future__ import annotations
+
+import numbers
+
 import numpy as np
+
+
+def _positive_int(value, name: str) -> int:
+    if not isinstance(value, numbers.Integral) or isinstance(value, bool) or value <= 0:
+        raise ValueError(f"{name} must be a positive integer, got {value!r}")
+    return int(value)
+
+
+def _numeric_dtype(dtype):
+    try:
+        resolved = np.dtype(dtype)
+    except TypeError as exc:
+        raise TypeError(f"dtype must be a NumPy numeric dtype, got {dtype!r}") from exc
+    if not np.issubdtype(resolved, np.number) or np.issubdtype(
+        resolved, np.complexfloating
+    ):
+        raise TypeError(f"dtype must be real numeric, got {resolved}")
+    return resolved
+
+
+def _numeric_array(value, name: str) -> np.ndarray:
+    try:
+        arr = np.asarray(value)
+    except Exception as exc:  # pragma: no cover - NumPy raises the useful message
+        raise TypeError(f"{name} must be array-like") from exc
+    if not np.issubdtype(arr.dtype, np.number) or np.issubdtype(
+        arr.dtype, np.complexfloating
+    ):
+        raise TypeError(
+            f"{name} must contain real numeric values, got dtype {arr.dtype}"
+        )
+    return arr
 
 
 class Module:
@@ -26,18 +61,40 @@ class Linear(Module):
         self, n_in: int, n_out: int, rng: np.random.Generator, dtype=np.float64
     ):
         super().__init__()
-        self.p["W"] = (rng.standard_normal((n_in, n_out)) * np.sqrt(2.0 / n_in)).astype(
-            dtype
-        )
-        self.p["b"] = np.zeros(n_out, dtype=dtype)
+        self.n_in = _positive_int(n_in, "n_in")
+        self.n_out = _positive_int(n_out, "n_out")
+        resolved = _numeric_dtype(dtype)
+        self.p["W"] = (
+            rng.standard_normal((self.n_in, self.n_out)) * np.sqrt(2.0 / self.n_in)
+        ).astype(resolved)
+        self.p["b"] = np.zeros(self.n_out, dtype=resolved)
         self.g = {k: np.zeros_like(v) for k, v in self.p.items()}
+        self._check_shapes()
+
+    def _check_shapes(self) -> None:
+        if self.p["W"].shape != (self.n_in, self.n_out) or self.p["b"].shape != (
+            self.n_out,
+        ):
+            raise ValueError("Linear parameter shapes are invalid")
 
     def forward(self, x):
+        self._check_shapes()
+        x = _numeric_array(x, "x")
+        if x.ndim < 1:
+            raise ValueError("x must have at least one dimension")
+        if x.shape[-1] != self.n_in:
+            raise ValueError(f"x last dimension must be {self.n_in}, got {x.shape[-1]}")
         self._shape = x.shape
         self._x = x.reshape(-1, x.shape[-1])
         return (self._x @ self.p["W"] + self.p["b"]).reshape(*x.shape[:-1], -1)
 
     def backward(self, dy):
+        if not hasattr(self, "_x"):
+            raise RuntimeError("Linear.backward called before forward")
+        dy = _numeric_array(dy, "dy")
+        expected = (*self._shape[:-1], self.n_out)
+        if dy.shape != expected:
+            raise ValueError(f"dy must have shape {expected}, got {dy.shape}")
         dy2 = dy.reshape(-1, dy.shape[-1])
         self.g["W"][...] = self._x.T @ dy2
         self.g["b"][...] = dy2.sum(axis=0)
@@ -46,19 +103,31 @@ class Linear(Module):
 
 class ReLU(Module):
     def forward(self, x):
+        x = _numeric_array(x, "x")
         self._mask = x > 0
         return x * self._mask
 
     def backward(self, dy):
+        if not hasattr(self, "_mask"):
+            raise RuntimeError("ReLU.backward called before forward")
+        dy = _numeric_array(dy, "dy")
+        if dy.shape != self._mask.shape:
+            raise ValueError(f"dy must have shape {self._mask.shape}, got {dy.shape}")
         return dy * self._mask
 
 
 class Tanh(Module):
     def forward(self, x):
+        x = _numeric_array(x, "x")
         self._y = np.tanh(x)
         return self._y
 
     def backward(self, dy):
+        if not hasattr(self, "_y"):
+            raise RuntimeError("Tanh.backward called before forward")
+        dy = _numeric_array(dy, "dy")
+        if dy.shape != self._y.shape:
+            raise ValueError(f"dy must have shape {self._y.shape}, got {dy.shape}")
         return dy * (1.0 - self._y**2)
 
 
@@ -67,12 +136,27 @@ class LayerNorm(Module):
 
     def __init__(self, n: int, eps: float = 1e-5, dtype=np.float64):
         super().__init__()
-        self.eps = eps
-        self.p["gamma"] = np.ones(n, dtype=dtype)
-        self.p["beta"] = np.zeros(n, dtype=dtype)
+        self.n = _positive_int(n, "n")
+        if not isinstance(eps, numbers.Real) or eps <= 0:
+            raise ValueError(f"eps must be positive, got {eps!r}")
+        self.eps = float(eps)
+        resolved = _numeric_dtype(dtype)
+        self.p["gamma"] = np.ones(self.n, dtype=resolved)
+        self.p["beta"] = np.zeros(self.n, dtype=resolved)
         self.g = {k: np.zeros_like(v) for k, v in self.p.items()}
+        self._check_shapes()
+
+    def _check_shapes(self) -> None:
+        if self.p["gamma"].shape != (self.n,) or self.p["beta"].shape != (self.n,):
+            raise ValueError("LayerNorm parameter shapes are invalid")
 
     def forward(self, x):
+        self._check_shapes()
+        x = _numeric_array(x, "x")
+        if x.ndim < 1:
+            raise ValueError("x must have at least one dimension")
+        if x.shape[-1] != self.n:
+            raise ValueError(f"x last dimension must be {self.n}, got {x.shape[-1]}")
         mu = x.mean(axis=-1, keepdims=True)
         var = x.var(axis=-1, keepdims=True)
         self._inv = 1.0 / np.sqrt(var + self.eps)
@@ -80,6 +164,11 @@ class LayerNorm(Module):
         return self.p["gamma"] * self._xhat + self.p["beta"]
 
     def backward(self, dy):
+        if not hasattr(self, "_xhat"):
+            raise RuntimeError("LayerNorm.backward called before forward")
+        dy = _numeric_array(dy, "dy")
+        if dy.shape != self._xhat.shape:
+            raise ValueError(f"dy must have shape {self._xhat.shape}, got {dy.shape}")
         n = dy.shape[-1]
         axes = tuple(range(dy.ndim - 1))
         self.g["gamma"][...] = (dy * self._xhat).sum(axis=axes)
@@ -102,12 +191,28 @@ class SelfAttention(Module):
         self, d: int, rng: np.random.Generator, causal: bool = False, dtype=np.float64
     ):
         super().__init__()
-        self.d, self.causal = d, causal
+        self.d = _positive_int(d, "d")
+        self.causal = bool(causal)
+        resolved = _numeric_dtype(dtype)
         for n in ("Wq", "Wk", "Wv", "Wo"):
-            self.p[n] = (rng.standard_normal((d, d)) / np.sqrt(d)).astype(dtype)
+            self.p[n] = (
+                rng.standard_normal((self.d, self.d)) / np.sqrt(self.d)
+            ).astype(resolved)
         self.g = {k: np.zeros_like(v) for k, v in self.p.items()}
+        self._check_shapes()
+
+    def _check_shapes(self) -> None:
+        for name in ("Wq", "Wk", "Wv", "Wo"):
+            if self.p[name].shape != (self.d, self.d):
+                raise ValueError(f"SelfAttention parameter {name} has an invalid shape")
 
     def forward(self, x):
+        self._check_shapes()
+        x = _numeric_array(x, "x")
+        if x.ndim != 3:
+            raise ValueError(f"x must have shape (B, T, D), got {x.shape}")
+        if x.shape[-1] != self.d:
+            raise ValueError(f"x last dimension must be {self.d}, got {x.shape[-1]}")
         self._x = x
         self._q, self._k, self._v = x @ self.p["Wq"], x @ self.p["Wk"], x @ self.p["Wv"]
         s = self._q @ self._k.transpose(0, 2, 1) / np.sqrt(self.d)
@@ -121,6 +226,11 @@ class SelfAttention(Module):
         return self._o @ self.p["Wo"]
 
     def backward(self, dy):
+        if not hasattr(self, "_x"):
+            raise RuntimeError("SelfAttention.backward called before forward")
+        dy = _numeric_array(dy, "dy")
+        if dy.shape != self._x.shape:
+            raise ValueError(f"dy must have shape {self._x.shape}, got {dy.shape}")
         x, q, k, v, a, o = self._x, self._q, self._k, self._v, self._a, self._o
         self.g["Wo"][...] = np.einsum("btd,bte->de", o, dy)
         do = dy @ self.p["Wo"].T

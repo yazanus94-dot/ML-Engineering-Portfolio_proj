@@ -8,6 +8,7 @@ from lab.cases import (
     run_all,
     scale_fixed,
     softmax_fixed,
+    standardise_fixed,
     variance_fixed,
     xent_fixed,
 )
@@ -42,6 +43,31 @@ def test_fixed_xent_matches_naive_on_safe_inputs():
     z = np.array([0.2, 1.0, -0.5])
     p = np.exp(z) / np.exp(z).sum()
     assert abs(xent_fixed(z, 1) + np.log(p[1])) < 1e-12
+
+
+def test_standardise_fixed_has_zero_mean_and_unit_std():
+    X = np.array([[1.0, 10.0], [2.0, 20.0], [3.0, 30.0], [4.0, 40.0]])
+    Z = standardise_fixed(X)
+    assert np.allclose(Z.mean(axis=0), 0.0, atol=1e-12)
+    assert np.allclose(Z.std(axis=0), 1.0, atol=1e-12)
+    assert not np.allclose(Z.mean(axis=1), 0.0, atol=1e-12)
+
+
+def test_standardise_fixed_handles_constant_columns():
+    X = np.array([[5.0, 1.0], [5.0, 2.0], [5.0, 3.0], [5.0, 4.0]])
+    Z = standardise_fixed(X)
+    assert np.isfinite(Z).all()
+    assert np.allclose(Z[:, 0], 0.0)
+    assert np.allclose(Z[:, 1].mean(), 0.0, atol=1e-12)
+    assert np.allclose(Z[:, 1].std(), 1.0, atol=1e-12)
+
+
+def test_standardise_fixed_is_stable_with_large_offsets():
+    X = np.array([[1e6, 1e-3], [1e6 + 1.0, 2e-3], [1e6 + 2.0, 3e-3], [1e6 + 3.0, 4e-3]])
+    Z = standardise_fixed(X)
+    assert np.isfinite(Z).all()
+    assert np.allclose(Z.mean(axis=0), 0.0, atol=1e-9)
+    assert np.allclose(Z.std(axis=0), 1.0, atol=1e-9)
 
 
 def test_scale_fixed_uses_training_statistics():
