@@ -25,10 +25,17 @@ def run_task(task: Task, python: str = sys.executable, timeout: int = 120) -> di
         started = time.perf_counter()
         try:
             completed = subprocess.run(
-                [python, "-m", "pytest", "-q"], cwd=root,
-                capture_output=True, text=True, timeout=timeout, check=False,
+                [python, "-m", "pytest", "-q"],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                check=False,
             )
-            returncode, output = completed.returncode, completed.stdout + completed.stderr
+            returncode, output = (
+                completed.returncode,
+                completed.stdout + completed.stderr,
+            )
         except subprocess.TimeoutExpired:
             returncode, output = -1, f"TIMEOUT after {timeout}s"
         duration_ms = round((time.perf_counter() - started) * 1000, 1)
@@ -45,8 +52,12 @@ def run_task(task: Task, python: str = sys.executable, timeout: int = 120) -> di
 
 
 def build_report(results: list[dict]) -> dict:
-    by_dimension: dict[str, dict[str, int]] = defaultdict(lambda: {"passed": 0, "total": 0})
-    by_category: dict[str, dict[str, int]] = defaultdict(lambda: {"passed": 0, "total": 0})
+    by_dimension: dict[str, dict[str, int]] = defaultdict(
+        lambda: {"passed": 0, "total": 0}
+    )
+    by_category: dict[str, dict[str, int]] = defaultdict(
+        lambda: {"passed": 0, "total": 0}
+    )
     for result in results:
         for key, bucket in ((dim, by_dimension[dim]) for dim in result["dimensions"]):
             bucket["total"] += 1
@@ -74,8 +85,8 @@ def build_report(results: list[dict]) -> dict:
         "human_review": {
             "status": "pending",
             "note": "No human-reviewed agent solutions exist in this repository. "
-                    "These numbers validate the benchmark harness against golden "
-                    "solutions only; they are not agent performance scores.",
+            "These numbers validate the benchmark harness against golden "
+            "solutions only; they are not agent performance scores.",
         },
         "limitations": [
             "Golden-solution self-check is not an evaluation of any coding agent.",
@@ -88,16 +99,22 @@ def build_report(results: list[dict]) -> dict:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", default="reports/evaluation_results.json")
-    parser.add_argument("--ids", nargs="*", default=None, help="Optional subset of task ids")
+    parser.add_argument(
+        "--ids", nargs="*", default=None, help="Optional subset of task ids"
+    )
     args = parser.parse_args(argv)
     tasks = [task for task in TASKS if not args.ids or task.id in args.ids]
     results = [run_task(task) for task in tasks]
     report = build_report(results)
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(f"{report['summary']['passed']}/{report['summary']['tasks']} golden tasks passed; "
-          f"report: {output}")
+    output.write_text(
+        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(
+        f"{report['summary']['passed']}/{report['summary']['tasks']} golden tasks passed; "
+        f"report: {output}"
+    )
     return 0 if report["summary"]["failed"] == 0 else 1
 
 

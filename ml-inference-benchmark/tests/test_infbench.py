@@ -1,4 +1,6 @@
-import sys, pathlib
+import sys
+import pathlib
+
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 import numpy as np
 from infbench import model as M
@@ -13,7 +15,8 @@ def _setup(seed=0, n=12):
 
 
 def test_all_impls_match_reference_within_tolerance():
-    m, x = _setup(); ref = M.forward_reference(m, x)
+    m, x = _setup()
+    ref = M.forward_reference(m, x)
     for name, (fn, _) in build_impls(m).items():
         if name == "reference":
             continue
@@ -41,7 +44,8 @@ def test_int8_weights_are_about_4x_smaller_than_float32():
 
 
 def test_relu_zero_rows_do_not_break_loops_impl():
-    m, _ = _setup(); x = np.zeros((2, SIZES[0]))
+    m, _ = _setup()
+    x = np.zeros((2, SIZES[0]))
     assert np.allclose(M.forward_loops(m, x), M.forward_reference(m, x))
 
 

@@ -1,11 +1,22 @@
 """Edge-case and input-validation tests for nnscratch."""
+
 from __future__ import annotations
 
-import sys, pathlib
+import sys
+import pathlib
+
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 import numpy as np
 import pytest
-from nnscratch import Linear, ReLU, Tanh, LayerNorm, SelfAttention, Sequential, Adam, SGD, softmax_cross_entropy, check_module
+from nnscratch import (
+    Linear,
+    LayerNorm,
+    SelfAttention,
+    Adam,
+    SGD,
+    softmax_cross_entropy,
+    check_module,
+)
 
 
 def test_linear_rejects_wrong_input_dim():

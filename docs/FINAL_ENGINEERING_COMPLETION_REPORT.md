@@ -56,11 +56,11 @@ or claimed.
 
 ## 10. Actual test results
 - ml-numpy-from-scratch: 20 passed
-- ml-numerical-debugging-lab: 6 passed
+- ml-numerical-debugging-lab: 8 passed
 - ml-inference-benchmark: 6 passed
 - ml-pytorch-training: 8 passed
 - coding-agent-benchmark: 3 passed
-- Total: 43 passed.
+- Total: 45 passed.
 
 ## 11. CI workflow status
 Workflow updated to Node 24-compatible action majors. It has not been executed remotely from this

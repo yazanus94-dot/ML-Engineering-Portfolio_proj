@@ -30,7 +30,9 @@ def accuracy(logits: torch.Tensor, y: torch.Tensor) -> float:
     return float((logits.argmax(dim=1) == y).float().mean())
 
 
-def seeded_split(x: torch.Tensor, y: torch.Tensor, seed: int, train_fraction: float = 0.8):
+def seeded_split(
+    x: torch.Tensor, y: torch.Tensor, seed: int, train_fraction: float = 0.8
+):
     """Seeded permutation before splitting; both classes occur in each partition."""
     permutation = torch.randperm(len(y), generator=torch.Generator().manual_seed(seed))
     x, y = x[permutation], y[permutation]
@@ -54,7 +56,10 @@ def train(config: dict, output_dir: str | Path) -> dict:
     for _ in range(int(config["epochs"])):
         model.train()
         for start in range(0, len(x_train), batch_size):
-            batch_x, batch_y = x_train[start:start + batch_size], y_train[start:start + batch_size]
+            batch_x, batch_y = (
+                x_train[start : start + batch_size],
+                y_train[start : start + batch_size],
+            )
             optimizer.zero_grad()
             loss = criterion(model(batch_x), batch_y)
             loss.backward()
@@ -76,12 +81,15 @@ def train(config: dict, output_dir: str | Path) -> dict:
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=True)
     checkpoint_path = out / "checkpoint.pt"
-    torch.save({
-        "version": __version__,
-        "config": config,
-        "state_dict": model.state_dict(),
-        "metrics": metrics,
-    }, checkpoint_path)
+    torch.save(
+        {
+            "version": __version__,
+            "config": config,
+            "state_dict": model.state_dict(),
+            "metrics": metrics,
+        },
+        checkpoint_path,
+    )
 
     manifest = {
         "project": "ml-pytorch-training",
@@ -114,9 +122,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", default="reports")
     args = parser.parse_args(argv)
     config = {
-        "input_dim": 2, "hidden": [32, 32], "num_classes": 2,
-        "epochs": args.epochs, "batch_size": args.batch_size, "lr": args.lr,
-        "seed": args.seed, "n_per_class": args.n_per_class,
+        "input_dim": 2,
+        "hidden": [32, 32],
+        "num_classes": 2,
+        "epochs": args.epochs,
+        "batch_size": args.batch_size,
+        "lr": args.lr,
+        "seed": args.seed,
+        "n_per_class": args.n_per_class,
     }
     manifest = train(config, args.output)
     print(json.dumps(manifest["metrics"], sort_keys=True))

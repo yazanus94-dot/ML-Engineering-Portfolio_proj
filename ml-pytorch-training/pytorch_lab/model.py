@@ -7,7 +7,12 @@ from torch import nn
 
 
 class MLP(nn.Module):
-    def __init__(self, input_dim: int = 2, hidden: tuple[int, ...] = (32, 32), num_classes: int = 2):
+    def __init__(
+        self,
+        input_dim: int = 2,
+        hidden: tuple[int, ...] = (32, 32),
+        num_classes: int = 2,
+    ):
         super().__init__()
         layers: list[nn.Module] = []
         previous = input_dim

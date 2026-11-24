@@ -15,8 +15,14 @@ from pytorch_lab.model import MLP, load_checkpoint  # noqa: E402
 from pytorch_lab.train import seeded_split, train  # noqa: E402
 
 TINY = {
-    "input_dim": 2, "hidden": [8, 8], "num_classes": 2,
-    "epochs": 2, "batch_size": 16, "lr": 0.01, "seed": 0, "n_per_class": 20,
+    "input_dim": 2,
+    "hidden": [8, 8],
+    "num_classes": 2,
+    "epochs": 2,
+    "batch_size": 16,
+    "lr": 0.01,
+    "seed": 0,
+    "n_per_class": 20,
 }
 
 

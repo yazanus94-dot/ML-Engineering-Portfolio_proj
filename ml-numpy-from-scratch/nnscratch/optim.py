@@ -1,4 +1,5 @@
 """SGD with momentum and Adam optimizers."""
+
 from __future__ import annotations
 
 from typing import Iterable, List, Tuple
@@ -54,6 +55,6 @@ class Adam:
             m += (1 - self.b1) * g
             v *= self.b2
             v += (1 - self.b2) * g * g
-            mh = m / (1 - self.b1 ** self.t)
-            vh = v / (1 - self.b2 ** self.t)
+            mh = m / (1 - self.b1**self.t)
+            vh = v / (1 - self.b2**self.t)
             p -= self.lr * mh / (np.sqrt(vh) + self.eps)

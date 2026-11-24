@@ -23,9 +23,11 @@ def make_spirals(n_per_class: int = 250, seed: int = 0, noise: float = 0.18):
         t = np.linspace(0, 1, n_per_class)
         r = 0.25 + 2.5 * t
         theta = 1.5 * np.pi * t + class_index * np.pi
-        xs[ix] = np.column_stack([
-            r * np.sin(theta) + rng.normal(0, noise, n_per_class),
-            r * np.cos(theta) + rng.normal(0, noise, n_per_class),
-        ])
+        xs[ix] = np.column_stack(
+            [
+                r * np.sin(theta) + rng.normal(0, noise, n_per_class),
+                r * np.cos(theta) + rng.normal(0, noise, n_per_class),
+            ]
+        )
         ys[ix] = class_index
     return torch.from_numpy(xs), torch.from_numpy(ys)

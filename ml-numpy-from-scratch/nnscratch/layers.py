@@ -5,6 +5,7 @@ Every layer exposes:
   backward(dy) -> dx     (fills self.g[name] with parameter gradients)
   p, g                   dicts of parameters and gradients (same keys)
 """
+
 from __future__ import annotations
 import numpy as np
 
@@ -21,9 +22,13 @@ class Module:
 class Linear(Module):
     """y = x @ W + b.  x: (..., in_features) -> (..., out_features). He-normal init."""
 
-    def __init__(self, n_in: int, n_out: int, rng: np.random.Generator, dtype=np.float64):
+    def __init__(
+        self, n_in: int, n_out: int, rng: np.random.Generator, dtype=np.float64
+    ):
         super().__init__()
-        self.p["W"] = (rng.standard_normal((n_in, n_out)) * np.sqrt(2.0 / n_in)).astype(dtype)
+        self.p["W"] = (rng.standard_normal((n_in, n_out)) * np.sqrt(2.0 / n_in)).astype(
+            dtype
+        )
         self.p["b"] = np.zeros(n_out, dtype=dtype)
         self.g = {k: np.zeros_like(v) for k, v in self.p.items()}
 
@@ -54,7 +59,7 @@ class Tanh(Module):
         return self._y
 
     def backward(self, dy):
-        return dy * (1.0 - self._y ** 2)
+        return dy * (1.0 - self._y**2)
 
 
 class LayerNorm(Module):
@@ -80,8 +85,11 @@ class LayerNorm(Module):
         self.g["gamma"][...] = (dy * self._xhat).sum(axis=axes)
         self.g["beta"][...] = dy.sum(axis=axes)
         dxhat = dy * self.p["gamma"]
-        return (self._inv / n) * (n * dxhat - dxhat.sum(-1, keepdims=True)
-                                  - self._xhat * (dxhat * self._xhat).sum(-1, keepdims=True))
+        return (self._inv / n) * (
+            n * dxhat
+            - dxhat.sum(-1, keepdims=True)
+            - self._xhat * (dxhat * self._xhat).sum(-1, keepdims=True)
+        )
 
 
 class SelfAttention(Module):
@@ -90,7 +98,9 @@ class SelfAttention(Module):
     S = Q K^T / sqrt(D);  A = softmax(S);  out = (A V) Wo.   `causal=True` masks future positions.
     """
 
-    def __init__(self, d: int, rng: np.random.Generator, causal: bool = False, dtype=np.float64):
+    def __init__(
+        self, d: int, rng: np.random.Generator, causal: bool = False, dtype=np.float64
+    ):
         super().__init__()
         self.d, self.causal = d, causal
         for n in ("Wq", "Wk", "Wv", "Wo"):
@@ -104,7 +114,7 @@ class SelfAttention(Module):
         if self.causal:
             t = x.shape[1]
             s = np.where(np.tril(np.ones((t, t), dtype=bool)), s, -np.inf)
-        s = s - s.max(axis=-1, keepdims=True)           # stable softmax
+        s = s - s.max(axis=-1, keepdims=True)  # stable softmax
         e = np.exp(s)
         self._a = e / e.sum(axis=-1, keepdims=True)
         self._o = self._a @ self._v
@@ -116,7 +126,9 @@ class SelfAttention(Module):
         do = dy @ self.p["Wo"].T
         da = do @ v.transpose(0, 2, 1)
         dv = a.transpose(0, 2, 1) @ do
-        ds = a * (da - (da * a).sum(axis=-1, keepdims=True)) / np.sqrt(self.d)   # masked entries have a == 0
+        ds = (
+            a * (da - (da * a).sum(axis=-1, keepdims=True)) / np.sqrt(self.d)
+        )  # masked entries have a == 0
         dq = ds @ k
         dk = ds.transpose(0, 2, 1) @ q
         self.g["Wq"][...] = np.einsum("btd,bte->de", x, dq)

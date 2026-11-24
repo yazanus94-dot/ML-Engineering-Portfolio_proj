@@ -1,7 +1,16 @@
-import sys, pathlib
+import sys
+import pathlib
+
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 import numpy as np
-from lab.cases import CASES, run_all, scale_fixed, softmax_fixed, variance_fixed, xent_fixed
+from lab.cases import (
+    CASES,
+    run_all,
+    scale_fixed,
+    softmax_fixed,
+    variance_fixed,
+    xent_fixed,
+)
 
 
 def test_eight_cases_unique_ids():

@@ -16,8 +16,12 @@ from . import __version__
 from .model import load_checkpoint
 
 
-def benchmark(checkpoint_path: str | Path, batch_size: int = 64,
-              repeats: int = 50, warmup: int = 5) -> dict:
+def benchmark(
+    checkpoint_path: str | Path,
+    batch_size: int = 64,
+    repeats: int = 50,
+    warmup: int = 5,
+) -> dict:
     """Measure batched CPU forward latency with warmup and repeats."""
     model, _ = load_checkpoint(checkpoint_path)
     example = torch.randn(batch_size, 2)
@@ -36,10 +40,14 @@ def benchmark(checkpoint_path: str | Path, batch_size: int = 64,
         "warmup": warmup,
         "median_ms": round(statistics.median(timings_ms), 4),
         "p95_ms": round(ordered[int(0.95 * (len(ordered) - 1))], 4),
-        "samples_per_second": round(batch_size / (statistics.median(timings_ms) / 1000.0), 1),
+        "samples_per_second": round(
+            batch_size / (statistics.median(timings_ms) / 1000.0), 1
+        ),
         "environment": {
-            "python": sys.version.split()[0], "platform": platform.platform(),
-            "torch": torch.__version__, "threads": torch.get_num_threads(),
+            "python": sys.version.split()[0],
+            "platform": platform.platform(),
+            "torch": torch.__version__,
+            "threads": torch.get_num_threads(),
             "project_version": __version__,
         },
         "caveat": "latency is machine-specific; compare implementations on the same host",
@@ -56,7 +64,9 @@ def main(argv: list[str] | None = None) -> int:
     result = benchmark(args.checkpoint, args.batch_size, args.repeats)
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    out.write_text(
+        json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(json.dumps(result, sort_keys=True))
     return 0
 

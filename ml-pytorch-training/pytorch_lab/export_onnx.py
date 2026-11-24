@@ -14,8 +14,11 @@ from .data import make_spirals
 from .model import load_checkpoint
 
 
-def export_and_validate(checkpoint_path: str | Path, output_path: str | Path,
-                        report_path: str | Path | None = None) -> dict:
+def export_and_validate(
+    checkpoint_path: str | Path,
+    output_path: str | Path,
+    report_path: str | Path | None = None,
+) -> dict:
     """Export to ONNX and compare ONNX Runtime output against PyTorch logits."""
     report: dict = {"status": "skipped", "reason": None}
     try:
@@ -25,7 +28,9 @@ def export_and_validate(checkpoint_path: str | Path, output_path: str | Path,
     except ImportError as exc:
         report["reason"] = f"optional dependency unavailable: {exc.name}"
         if report_path:
-            Path(report_path).write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+            Path(report_path).write_text(
+                json.dumps(report, indent=2, sort_keys=True) + "\n"
+            )
         return report
 
     model, checkpoint = load_checkpoint(checkpoint_path)
@@ -45,8 +50,12 @@ def export_and_validate(checkpoint_path: str | Path, output_path: str | Path,
         except (OSError, ValueError):
             pass
     torch.onnx.export(
-        model, sample, str(onnx_path),
-        input_names=["input"], output_names=["logits"], opset_version=13,
+        model,
+        sample,
+        str(onnx_path),
+        input_names=["input"],
+        output_names=["logits"],
+        opset_version=13,
         dynamic_axes={"input": {0: "batch"}, "logits": {0: "batch"}},
     )
 
@@ -63,12 +72,14 @@ def export_and_validate(checkpoint_path: str | Path, output_path: str | Path,
         "max_abs_logit_difference": max_abs_diff,
         "tolerance": 1e-5,
         "passed": bool(max_abs_diff <= 1e-5),
-        "argmax_agreement": float(np.mean(
-            np.argmax(onnx_logits, axis=1) == np.argmax(torch_logits, axis=1)
-        )),
+        "argmax_agreement": float(
+            np.mean(np.argmax(onnx_logits, axis=1) == np.argmax(torch_logits, axis=1))
+        ),
     }
     if report_path:
-        Path(report_path).write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+        Path(report_path).write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n"
+        )
     return report
 
 

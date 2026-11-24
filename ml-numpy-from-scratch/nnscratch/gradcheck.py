@@ -1,4 +1,5 @@
 """Finite-difference gradient checking (central differences, float64)."""
+
 from __future__ import annotations
 import numpy as np
 
@@ -29,8 +30,10 @@ def check_module(module, x, rng, eps: float = 1e-6, max_checks: int = 40) -> dic
         num, ana = [], []
         for i in idx:
             old = flat[i]
-            flat[i] = old + eps; lp = loss()
-            flat[i] = old - eps; lm = loss()
+            flat[i] = old + eps
+            lp = loss()
+            flat[i] = old - eps
+            lm = loss()
             flat[i] = old
             num.append((lp - lm) / (2 * eps))
             ana.append(analytic[name].reshape(-1)[i])
