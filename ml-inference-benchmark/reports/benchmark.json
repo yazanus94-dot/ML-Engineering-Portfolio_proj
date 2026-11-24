@@ -7,7 +7,7 @@
       10
     ],
     "batch": 64,
-    "repeats": 2,
+    "repeats": 5,
     "seed": 0,
     "loops_batch": 8
   },
@@ -22,8 +22,8 @@
     {
       "impl": "reference",
       "batch": 64,
-      "median_ms": 3.767000016523525,
-      "samples_per_s": 16989.646859376466,
+      "median_ms": 1.3688000035472214,
+      "samples_per_s": 46756.2827543433,
       "rel_error": 0.0,
       "tolerance": 0.0,
       "within_tolerance": true,
@@ -34,8 +34,8 @@
     {
       "impl": "loops",
       "batch": 8,
-      "median_ms": 174.88629999570549,
-      "samples_per_s": 45.74400624975455,
+      "median_ms": 151.6721500083804,
+      "samples_per_s": 52.74534579722099,
       "rel_error": 4.786764115555933e-16,
       "tolerance": 1e-09,
       "within_tolerance": true,
@@ -46,20 +46,20 @@
     {
       "impl": "per_sample",
       "batch": 64,
-      "median_ms": 4.4433000148274004,
-      "samples_per_s": 14403.7089069904,
+      "median_ms": 2.587400027550757,
+      "samples_per_s": 24735.255205428228,
       "rel_error": 2.5406973573779364e-07,
       "tolerance": 0.0001,
       "within_tolerance": true,
       "argmax_agreement": 1.0,
       "weight_bytes": 1597480,
-      "peak_alloc_bytes": 1680552
+      "peak_alloc_bytes": 82384
     },
     {
       "impl": "batched32",
       "batch": 64,
-      "median_ms": 2.0570999768096954,
-      "samples_per_s": 31111.759623494814,
+      "median_ms": 1.0595000348985195,
+      "samples_per_s": 60405.84982720648,
       "rel_error": 2.2726306357872312e-07,
       "tolerance": 0.0001,
       "within_tolerance": true,
@@ -70,14 +70,14 @@
     {
       "impl": "int8",
       "batch": 64,
-      "median_ms": 45.171900012064725,
-      "samples_per_s": 1416.8100076132855,
+      "median_ms": 50.36669998662546,
+      "samples_per_s": 1270.6808271535513,
       "rel_error": 0.012370407605439091,
       "tolerance": 0.05,
       "within_tolerance": true,
       "argmax_agreement": 0.9375,
       "weight_bytes": 406608,
-      "peak_alloc_bytes": 1607288
+      "peak_alloc_bytes": 1607048
     }
   ]
 }

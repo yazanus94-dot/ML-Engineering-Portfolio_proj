@@ -18,8 +18,12 @@ def _time(fn, repeats, warmup=1):
 
 
 def _peak_alloc(fn):
-    tracemalloc.start(); fn(); peak = tracemalloc.get_traced_memory()[1]; tracemalloc.stop()
-    return peak
+    tracemalloc.start()
+    try:
+        fn()
+        return tracemalloc.get_traced_memory()[1]
+    finally:
+        tracemalloc.stop()
 
 
 def build_impls(m: M.MLP):
@@ -27,7 +31,7 @@ def build_impls(m: M.MLP):
     return {
         "reference": (lambda x: M.forward_reference(m, x), m),
         "loops": (lambda x: M.forward_loops(m, x), m),
-        "per_sample": (lambda x: M.forward_per_sample(m, x), p32),
+        "per_sample": (lambda x: M.forward_per_sample(p32, x), p32),
         "batched32": (lambda x: M.forward_batched32(p32, x), p32),
         "int8": (lambda x: M.forward_int8(pq, x), pq),
     }

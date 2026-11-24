@@ -7,11 +7,11 @@ Audited the five existing subprojects, root CI and documentation without modifyi
 | Project | Tests | Result |
 |---|---:|---|
 | ml-numpy-from-scratch | 20 | pass |
-| ml-numerical-debugging-lab | 6 | pass |
+| ml-numerical-debugging-lab | 8 | pass |
 | ml-inference-benchmark | 6 | pass |
 | ml-pytorch-training | 8 | pass |
 | coding-agent-benchmark | 3 | pass |
-| **Total** | **43** | pass |
+| **Total** | **45** | pass |
 
 ## Findings and actions
 | Component | Problem | Severity | Proposed fix | Existing evidence | Verification required |

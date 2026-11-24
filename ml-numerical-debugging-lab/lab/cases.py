@@ -70,8 +70,14 @@ def scale_buggy(train, test):
 
 
 def scale_fixed(train, test):
-    mu, sd = train.mean(0), train.std(0)            # fit on train only
-    return (train - mu) / sd
+    """Fit mean/std on training data only and transform both splits.
+
+    Returns ``(train_scaled, test_scaled)``. Zero-variance features are left
+    unchanged rather than producing NaNs or infinities.
+    """
+    mu, sd = train.mean(0), train.std(0)
+    sd = np.where(sd == 0.0, 1.0, sd)
+    return (train - mu) / sd, (test - mu) / sd
 
 
 # 5 ---------------------------------------------------------------- low-precision accumulation
@@ -161,7 +167,7 @@ CASES = [
          "The transformed training data must not depend on the test data.",
          scale_buggy, scale_fixed,
          lambda: (np.abs(scale_buggy(_TRAIN, _TEST_A) - scale_buggy(_TRAIN, _TEST_B)).max(),
-                  np.abs(scale_fixed(_TRAIN, _TEST_A) - scale_fixed(_TRAIN, _TEST_B)).max()),
+                  np.abs(scale_fixed(_TRAIN, _TEST_A)[0] - scale_fixed(_TRAIN, _TEST_B)[0]).max()),
          lambda b, f: b > 0.1 and f == 0.0),
     Case("C05", "Low-precision accumulation", "Summing 10,000 values of 0.1 returns 256 instead of ~1000.",
          "float16 has 11 significant bits; once the sum reaches 256, adding 0.1 is below half the spacing and rounds away.", "Accumulate in float32 (or higher), cast at the end if needed.",

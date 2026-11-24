@@ -58,8 +58,14 @@ def forward_loops(m: MLP, x):
     return np.array(out)
 
 
-def forward_per_sample(m: MLP, x):
-    W32 = [w.astype(np.float32) for w in m.weights]; B32 = [b.astype(np.float32) for b in m.biases]
+def prepare_per_sample(m: MLP):
+    """Prepare float32 weights and biases once for per-sample inference."""
+    return [w.astype(np.float32) for w in m.weights], [b.astype(np.float32) for b in m.biases]
+
+
+def forward_per_sample(prep, x):
+    """Per-sample inference using a prepared float32 representation."""
+    W32, B32 = prep
     out = []
     for row in np.asarray(x, dtype=np.float32):
         h = row
