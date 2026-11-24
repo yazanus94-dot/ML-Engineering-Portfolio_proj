@@ -7,9 +7,17 @@
       10
     ],
     "batch": 64,
-    "repeats": 2,
+    "comparison_batch": 64,
+    "repeats": 5,
     "seed": 0,
-    "loops_batch": 8
+    "loops_batch": 64
+  },
+  "methodology": {
+    "latency": "wall-clock time per call, median of repeated measurements after one warm-up",
+    "throughput": "batch / median wall-clock seconds",
+    "per_sample_latency": "median wall-clock milliseconds / batch size",
+    "variability": "sample standard deviation across repeats, plus minimum and maximum",
+    "memory": "tracemalloc peak during one call; an already-active tracing session is preserved"
   },
   "environment": {
     "python": "3.14.7",
@@ -22,62 +30,82 @@
     {
       "impl": "reference",
       "batch": 64,
-      "median_ms": 24.40004999516532,
-      "samples_per_s": 2622.945445303641,
+      "median_ms": 1.2511999811977148,
+      "std_ms": 1.2102587000716452,
+      "min_ms": 1.2309000012464821,
+      "max_ms": 3.9607000071555376,
+      "median_ms_per_sample": 0.019549999706214294,
+      "samples_per_s": 51150.89590933003,
       "rel_error": 0.0,
       "tolerance": 0.0,
       "within_tolerance": true,
       "argmax_agreement": 1.0,
       "weight_bytes": 3194960,
-      "peak_alloc_bytes": 853496
+      "peak_alloc_bytes": 853496.0
     },
     {
       "impl": "loops",
-      "batch": 8,
-      "median_ms": 206.00604999344796,
-      "samples_per_s": 38.83381094999123,
-      "rel_error": 4.786764115555933e-16,
+      "batch": 64,
+      "median_ms": 1798.1618999911007,
+      "std_ms": 94.57270360253976,
+      "min_ms": 1731.2888999585994,
+      "max_ms": 1865.034900023602,
+      "median_ms_per_sample": 28.096279687360948,
+      "samples_per_s": 35.59190081845063,
+      "rel_error": 6.528358138576295e-16,
       "tolerance": 1e-09,
       "within_tolerance": true,
       "argmax_agreement": 1.0,
       "weight_bytes": 3194960,
-      "peak_alloc_bytes": 12956280
+      "peak_alloc_bytes": 13444048.0
     },
     {
       "impl": "per_sample",
       "batch": 64,
-      "median_ms": 5.336399975931272,
-      "samples_per_s": 11993.104019312414,
+      "median_ms": 2.6043999823741615,
+      "std_ms": 0.5830195353885586,
+      "min_ms": 2.3857999476604164,
+      "max_ms": 3.5337000153958797,
+      "median_ms_per_sample": 0.04069374972459627,
+      "samples_per_s": 24573.798353990864,
       "rel_error": 2.5406973573779364e-07,
       "tolerance": 0.0001,
       "within_tolerance": true,
       "argmax_agreement": 1.0,
       "weight_bytes": 1597480,
-      "peak_alloc_bytes": 1680552
+      "peak_alloc_bytes": 82384.0
     },
     {
       "impl": "batched32",
       "batch": 64,
-      "median_ms": 0.7848999812267721,
-      "samples_per_s": 81539.05151070353,
+      "median_ms": 1.0929999989457428,
+      "std_ms": 0.6664032334953388,
+      "min_ms": 0.9658999624662101,
+      "max_ms": 2.54979997407645,
+      "median_ms_per_sample": 0.017078124983527232,
+      "samples_per_s": 58554.437384932695,
       "rel_error": 2.2726306357872312e-07,
       "tolerance": 0.0001,
       "within_tolerance": true,
       "argmax_agreement": 1.0,
       "weight_bytes": 1597480,
-      "peak_alloc_bytes": 427512
+      "peak_alloc_bytes": 427512.0
     },
     {
       "impl": "int8",
       "batch": 64,
-      "median_ms": 55.70505000650883,
-      "samples_per_s": 1148.9084022457919,
+      "median_ms": 39.402499969583005,
+      "std_ms": 5.0227126895632646,
+      "min_ms": 36.99380002217367,
+      "max_ms": 49.87069999333471,
+      "median_ms_per_sample": 0.6156640620247344,
+      "samples_per_s": 1624.2624211510738,
       "rel_error": 0.012370407605439091,
       "tolerance": 0.05,
       "within_tolerance": true,
       "argmax_agreement": 0.9375,
       "weight_bytes": 406608,
-      "peak_alloc_bytes": 1607288
+      "peak_alloc_bytes": 1607048.0
     }
   ]
 }

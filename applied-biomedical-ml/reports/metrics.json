@@ -1,0 +1,155 @@
+{
+  "dataset": {
+    "name": "Breast Cancer Wisconsin (Diagnostic)",
+    "uci_id": 17,
+    "doi": "10.24432/C5DW2B",
+    "license": "CC BY 4.0",
+    "source_url": "https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic",
+    "raw_url": "https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data",
+    "sha256": "d606af411f3e5be8a317a5a8b652b425aaf0ff38ca683d5327ffff94c3695f4a",
+    "n_samples": 569,
+    "n_features": 30,
+    "positive_class": "malignant",
+    "target": "Diagnosis (M=1, B=0)"
+  },
+  "split": {
+    "seed": 42,
+    "test_frac": 0.2,
+    "n_train": 456,
+    "n_test": 113,
+    "train_positives": 170,
+    "test_positives": 42,
+    "stratified": true,
+    "group_level_split": false
+  },
+  "model": {
+    "name": "L2-regularised logistic regression (from scratch)",
+    "hyperparameters": {
+      "lr": 0.5,
+      "epochs": 4000,
+      "l2": 0.001,
+      "tol": 1e-10
+    },
+    "threshold": 0.5,
+    "n_iter": 4000,
+    "final_training_loss": 0.056440316401896,
+    "intercept": -0.013294164870934405,
+    "n_parameters": 31
+  },
+  "metrics": {
+    "train": {
+      "threshold": 0.5,
+      "n": 456,
+      "prevalence": 0.37280701754385964,
+      "confusion": {
+        "tp": 166,
+        "tn": 286,
+        "fp": 0,
+        "fn": 4
+      },
+      "accuracy": 0.9912280701754386,
+      "accuracy_ci95": [
+        0.9776651921264887,
+        0.9965836308242242
+      ],
+      "sensitivity": 0.9764705882352941,
+      "sensitivity_ci95": [
+        0.9410708694326396,
+        0.9908127048250533
+      ],
+      "specificity": 1.0,
+      "specificity_ci95": [
+        0.986746344583262,
+        1.0
+      ],
+      "ppv": 1.0,
+      "npv": 0.9862068965517241,
+      "f1": 0.988095238095238,
+      "auroc": 0.9979843685726039
+    },
+    "test": {
+      "threshold": 0.5,
+      "n": 113,
+      "prevalence": 0.37168141592920356,
+      "confusion": {
+        "tp": 40,
+        "tn": 68,
+        "fp": 3,
+        "fn": 2
+      },
+      "accuracy": 0.9557522123893806,
+      "accuracy_ci95": [
+        0.9005822773378891,
+        0.9809541313958008
+      ],
+      "sensitivity": 0.9523809523809523,
+      "sensitivity_ci95": [
+        0.8421014760304114,
+        0.9868424750910944
+      ],
+      "specificity": 0.9577464788732394,
+      "specificity_ci95": [
+        0.882975839595153,
+        0.9855267393795246
+      ],
+      "ppv": 0.9302325581395349,
+      "npv": 0.9714285714285714,
+      "f1": 0.9411764705882352,
+      "auroc": 0.9959758551307847
+    }
+  },
+  "top_coefficients": [
+    {
+      "feature": "radius_se",
+      "standardised_coefficient": 1.5552535003225783,
+      "odds_ratio_per_sd": 4.736287023277889
+    },
+    {
+      "feature": "texture_worst",
+      "standardised_coefficient": 1.5369889418511877,
+      "odds_ratio_per_sd": 4.650566042920752
+    },
+    {
+      "feature": "concave_points_mean",
+      "standardised_coefficient": 1.3805987360524015,
+      "odds_ratio_per_sd": 3.9772822570171216
+    },
+    {
+      "feature": "area_se",
+      "standardised_coefficient": 1.1684373773171808,
+      "odds_ratio_per_sd": 3.2169618114136256
+    },
+    {
+      "feature": "area_worst",
+      "standardised_coefficient": 1.1561363593794245,
+      "odds_ratio_per_sd": 3.177632298913377
+    },
+    {
+      "feature": "radius_worst",
+      "standardised_coefficient": 1.1382617202318286,
+      "odds_ratio_per_sd": 3.1213378882087266
+    },
+    {
+      "feature": "perimeter_worst",
+      "standardised_coefficient": 1.0831667909087312,
+      "odds_ratio_per_sd": 2.9540195165503214
+    },
+    {
+      "feature": "smoothness_worst",
+      "standardised_coefficient": 1.0753029676099264,
+      "odds_ratio_per_sd": 2.930880727964564
+    }
+  ],
+  "environment": {
+    "python": "3.14.7",
+    "numpy": "2.5.4",
+    "platform": "Windows-11-10.0.26300-SP0"
+  },
+  "command": "python -m bio_ml.train --output reports",
+  "limitations": [
+    "WDBC has no patient identifier, so patient-level (group) leakage cannot be constructed or measured. UCI documents one fine-needle aspirate per mass; the split is stratified by diagnosis only.",
+    "Preprocessing (mean/std) is fitted on the training split only; no resampling, feature selection or hyperparameter search is performed on the test split.",
+    "Hyperparameters were fixed a priori and not tuned against test performance.",
+    "This is a portfolio demonstration on a 1993 research dataset with 569 samples, not a clinical device. It must not be used for diagnosis or treatment decisions."
+  ]
+}

@@ -18,8 +18,8 @@ jobs:
       run:
         working-directory: ml-numpy-from-scratch
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -r requirements.txt
@@ -37,8 +37,8 @@ jobs:
       run:
         working-directory: ml-numerical-debugging-lab
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -r requirements.txt
@@ -56,11 +56,88 @@ jobs:
       run:
         working-directory: ml-inference-benchmark
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -r requirements.txt
       - run: python -m pytest -q
       - name: Benchmark run (batch 64)
         run: python -m infbench.run --batch 64 --repeats 2
+
+  pytorch-training:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    defaults:
+      run:
+        working-directory: ml-pytorch-training
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -r requirements.txt -r requirements-serving.txt
+      - run: python -m pytest -q
+      - name: Seeded training run
+        run: python -m pytorch_lab.train --epochs 20 --output reports
+      - name: ONNX export and numerical validation
+        run: python -m pytorch_lab.export_onnx --checkpoint reports/checkpoint.pt
+      - name: CPU inference benchmark
+        run: python -m pytorch_lab.benchmark_cpu --checkpoint reports/checkpoint.pt --repeats 5
+
+  coding-agent-benchmark:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    defaults:
+      run:
+        working-directory: coding-agent-benchmark
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - name: Golden-solution self-check (24 tasks)
+        run: python -m bench.run
+
+  applied-biomedical-ml:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    defaults:
+      run:
+        working-directory: applied-biomedical-ml
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - name: Dataset checksum and end-to-end training
+        run: python -m bio_ml.train --output reports
+
+  experiments:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -r ml-numpy-from-scratch/requirements.txt
+      - run: python -m pytest experiments/tests -q
+      - name: Run the recorded experiment
+        run: python experiments/experiment_runner.py --config experiments/configs/spiral_numpy.json --output experiments/results/ci_run.json

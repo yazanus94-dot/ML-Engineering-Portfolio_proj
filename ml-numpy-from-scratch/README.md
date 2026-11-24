@@ -12,7 +12,7 @@ Linear, ReLU, Tanh, LayerNorm and single-head self-attention (optionally causal)
 | `nnscratch/optim.py` | SGD with momentum, Adam |
 | `nnscratch/gradcheck.py` | Central-difference gradient checker |
 | `scripts/train_spiral.py` | Reproducible training run on a synthetic dataset |
-| `tests/` | 11 tests: gradient checks per layer, causal-mask test, loss stability, determinism, learning |
+| `tests/` | 33 tests: gradient checks per layer, causal mask, loss and optimizer stability, determinism, learning, and explicit validation of layer/optimizer inputs |
 
 ## Run
 ```bash

@@ -1,0 +1,33 @@
+{
+  "checksum_sha256": "b3d4b2e4683c6fa9bd97bdb53d1d45a44014e7a5e55033a8e43eb7458ca8f314",
+  "command": "python -m pytorch_lab.train",
+  "config": {
+    "batch_size": 32,
+    "epochs": 120,
+    "hidden": [
+      32,
+      32
+    ],
+    "input_dim": 2,
+    "lr": 0.01,
+    "n_per_class": 250,
+    "num_classes": 2,
+    "seed": 0
+  },
+  "data_statement": "synthetic seeded two-spirals; not real data",
+  "generated_at_utc": "2026-11-23T15:18:28+00:00",
+  "metrics": {
+    "final_train_loss": 0.00368632,
+    "n_test": 100,
+    "n_train": 400,
+    "test_accuracy": 0.99,
+    "train_accuracy": 0.9975
+  },
+  "project": "ml-pytorch-training",
+  "project_version": "0.1.0",
+  "versions": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.14.7",
+    "torch": "2.15.0+cpu"
+  }
+}

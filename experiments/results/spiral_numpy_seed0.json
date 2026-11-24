@@ -1,0 +1,41 @@
+{
+  "experiment": "spiral_numpy_seed0",
+  "project": "ml-numpy-from-scratch",
+  "config": {
+    "experiment": "spiral_numpy_seed0",
+    "project": "ml-numpy-from-scratch",
+    "dataset": {
+      "name": "synthetic three-arm spiral",
+      "kind": "synthetic",
+      "source": "generated in-repo by nnscratch.data.make_spirals",
+      "license": "generated data; no external dataset",
+      "is_biomedical": false
+    },
+    "model": {
+      "name": "NumPy MLP 2-64-64-3",
+      "implementation": "nnscratch"
+    },
+    "seed": 0,
+    "hyperparameters": {
+      "epochs": 300,
+      "hidden": 64,
+      "lr": 0.01
+    },
+    "command": "python experiments/experiment_runner.py --config experiments/configs/spiral_numpy.json",
+    "output": "experiments/results/spiral_numpy_seed0.json"
+  },
+  "metrics": {
+    "first_loss": 1.128228892206879,
+    "final_loss": 0.014454810813207285,
+    "train_accuracy": 0.9933333333333333,
+    "test_accuracy": 0.9733333333333334
+  },
+  "environment": {
+    "python": "3.14.7",
+    "numpy": "2.5.4",
+    "platform": "Windows-11-10.0.26300-SP0"
+  },
+  "command": "python experiments/experiment_runner.py --config experiments/configs/spiral_numpy.json",
+  "duration_seconds": 0.5455644000321627,
+  "deterministic": true
+}

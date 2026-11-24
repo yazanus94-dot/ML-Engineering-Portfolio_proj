@@ -1,0 +1,389 @@
+{
+  "benchmark": "coding-agent-benchmark",
+  "environment": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.14.7"
+  },
+  "execution_mode": "golden solutions executed against their own tests (self-check)",
+  "human_review": {
+    "note": "No human-reviewed agent solutions exist in this repository. These numbers validate the benchmark harness against golden solutions only; they are not agent performance scores.",
+    "status": "pending"
+  },
+  "limitations": [
+    "Golden-solution self-check is not an evaluation of any coding agent.",
+    "Task set is small and synthetic; it does not measure real-world ML engineering work.",
+    "Timings are machine-specific and include pytest process startup."
+  ],
+  "results": [
+    {
+      "category": "robustness",
+      "dimensions": [
+        "correctness",
+        "edge_cases"
+      ],
+      "duration_ms": 1241.1,
+      "id": "T01",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.28s",
+      "title": "Safe division"
+    },
+    {
+      "category": "numerical",
+      "dimensions": [
+        "correctness",
+        "numerical_stability"
+      ],
+      "duration_ms": 1206.9,
+      "id": "T02",
+      "passed": true,
+      "returncode": 0,
+      "tail": "3 passed, 130 warnings in 0.25s",
+      "title": "Clamp"
+    },
+    {
+      "category": "numerical",
+      "dimensions": [
+        "correctness",
+        "regression_risk"
+      ],
+      "duration_ms": 1221.2,
+      "id": "T03",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.25s",
+      "title": "Moving average"
+    },
+    {
+      "category": "algorithms",
+      "dimensions": [
+        "correctness",
+        "edge_cases"
+      ],
+      "duration_ms": 1211.2,
+      "id": "T04",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.24s",
+      "title": "Primality"
+    },
+    {
+      "category": "algorithms",
+      "dimensions": [
+        "correctness",
+        "performance"
+      ],
+      "duration_ms": 1199.5,
+      "id": "T05",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.24s",
+      "title": "Fibonacci"
+    },
+    {
+      "category": "strings",
+      "dimensions": [
+        "correctness",
+        "edge_cases"
+      ],
+      "duration_ms": 1203.2,
+      "id": "T06",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.25s",
+      "title": "Reverse words"
+    },
+    {
+      "category": "strings",
+      "dimensions": [
+        "correctness"
+      ],
+      "duration_ms": 1174.5,
+      "id": "T07",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.24s",
+      "title": "Count vowels"
+    },
+    {
+      "category": "algorithms",
+      "dimensions": [
+        "correctness",
+        "edge_cases"
+      ],
+      "duration_ms": 1174.9,
+      "id": "T08",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.25s",
+      "title": "Merge intervals"
+    },
+    {
+      "category": "algorithms",
+      "dimensions": [
+        "correctness",
+        "performance"
+      ],
+      "duration_ms": 1205.7,
+      "id": "T09",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.24s",
+      "title": "Two sum"
+    },
+    {
+      "category": "algorithms",
+      "dimensions": [
+        "correctness",
+        "regression_risk"
+      ],
+      "duration_ms": 1197.2,
+      "id": "T10",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.26s",
+      "title": "LCS length"
+    },
+    {
+      "category": "numerical",
+      "dimensions": [
+        "correctness",
+        "edge_cases"
+      ],
+      "duration_ms": 1199.1,
+      "id": "T11",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.26s",
+      "title": "Matrix transpose"
+    },
+    {
+      "category": "numerical",
+      "dimensions": [
+        "correctness",
+        "numerical_stability"
+      ],
+      "duration_ms": 1201.6,
+      "id": "T12",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.26s",
+      "title": "Normalize vector"
+    },
+    {
+      "category": "numerical",
+      "dimensions": [
+        "numerical_stability",
+        "correctness"
+      ],
+      "duration_ms": 1178.0,
+      "id": "T13",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.25s",
+      "title": "Stable softmax"
+    },
+    {
+      "category": "numerical",
+      "dimensions": [
+        "numerical_stability",
+        "correctness"
+      ],
+      "duration_ms": 1174.5,
+      "id": "T14",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.25s",
+      "title": "RMS"
+    },
+    {
+      "category": "numerical",
+      "dimensions": [
+        "numerical_stability",
+        "regression_risk"
+      ],
+      "duration_ms": 1167.6,
+      "id": "T15",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.24s",
+      "title": "Running mean and variance"
+    },
+    {
+      "category": "ml-features",
+      "dimensions": [
+        "correctness",
+        "test_coverage"
+      ],
+      "duration_ms": 1199.2,
+      "id": "T16",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.25s",
+      "title": "Bag of words"
+    },
+    {
+      "category": "strings",
+      "dimensions": [
+        "correctness",
+        "edge_cases"
+      ],
+      "duration_ms": 1158.4,
+      "id": "T17",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.25s",
+      "title": "Balanced brackets"
+    },
+    {
+      "category": "algorithms",
+      "dimensions": [
+        "correctness",
+        "regression_risk"
+      ],
+      "duration_ms": 1155.0,
+      "id": "T18",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.24s",
+      "title": "Rotate right"
+    },
+    {
+      "category": "numerical",
+      "dimensions": [
+        "correctness",
+        "performance"
+      ],
+      "duration_ms": 1210.3,
+      "id": "T19",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.26s",
+      "title": "GCD"
+    },
+    {
+      "category": "data",
+      "dimensions": [
+        "correctness",
+        "edge_cases"
+      ],
+      "duration_ms": 1215.5,
+      "id": "T20",
+      "passed": true,
+      "returncode": 0,
+      "tail": "1 passed, 44 warnings in 0.25s",
+      "title": "Unique sorted"
+    },
+    {
+      "category": "algorithms",
+      "dimensions": [
+        "correctness",
+        "edge_cases"
+      ],
+      "duration_ms": 1210.9,
+      "id": "T21",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.25s",
+      "title": "Binary search"
+    },
+    {
+      "category": "data",
+      "dimensions": [
+        "correctness",
+        "test_coverage"
+      ],
+      "duration_ms": 1179.7,
+      "id": "T22",
+      "passed": true,
+      "returncode": 0,
+      "tail": "1 passed, 44 warnings in 0.26s",
+      "title": "Pad sequences"
+    },
+    {
+      "category": "data",
+      "dimensions": [
+        "correctness",
+        "performance"
+      ],
+      "duration_ms": 1182.3,
+      "id": "T23",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.25s",
+      "title": "Top-k"
+    },
+    {
+      "category": "data",
+      "dimensions": [
+        "correctness",
+        "regression_risk"
+      ],
+      "duration_ms": 1149.1,
+      "id": "T24",
+      "passed": true,
+      "returncode": 0,
+      "tail": "2 passed, 87 warnings in 0.25s",
+      "title": "Group by key"
+    }
+  ],
+  "summary": {
+    "by_category": {
+      "algorithms": {
+        "passed": 7,
+        "total": 7
+      },
+      "data": {
+        "passed": 4,
+        "total": 4
+      },
+      "ml-features": {
+        "passed": 1,
+        "total": 1
+      },
+      "numerical": {
+        "passed": 8,
+        "total": 8
+      },
+      "robustness": {
+        "passed": 1,
+        "total": 1
+      },
+      "strings": {
+        "passed": 3,
+        "total": 3
+      }
+    },
+    "by_dimension": {
+      "correctness": {
+        "passed": 23,
+        "total": 23
+      },
+      "edge_cases": {
+        "passed": 8,
+        "total": 8
+      },
+      "numerical_stability": {
+        "passed": 5,
+        "total": 5
+      },
+      "performance": {
+        "passed": 4,
+        "total": 4
+      },
+      "regression_risk": {
+        "passed": 5,
+        "total": 5
+      },
+      "test_coverage": {
+        "passed": 2,
+        "total": 2
+      }
+    },
+    "failed": 0,
+    "passed": 24,
+    "tasks": 24,
+    "total_duration_ms": 28616.6
+  },
+  "version": "0.1.0"
+}
